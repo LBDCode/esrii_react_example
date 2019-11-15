@@ -6,9 +6,9 @@ import { loadCss } from 'esri-loader';
 import { Scene } from '@esri/react-arcgis';
 import GagePoint from './components/Point';
 import gageData from './utils/dummydata';
-import Dashboard from './components/Dashboard';
+import Dashboard from './components/Dashboard2';
 import Nav from './components/Nav';
-
+import Sidebar from './components/Sidebar';
 
 
 const App = () => {
@@ -31,8 +31,9 @@ const App = () => {
             center: [-79.9414, 37.2710],
             zoom: 11,
             popup: {dockEnabled: true, dockOptions: {buttonEnabled: false, breakpoint: false}},
-            ui: {components: ["zoom"] }
-          }}         
+            ui: {components: [] },
+          }}
+                  
         >
           {/* map through gage data and add points (component) for each gage to map.  Assume we will want to create a single layer for final version*/}
           {gageInfo.map(gage => (
@@ -43,7 +44,7 @@ const App = () => {
         <Dashboard
         >
         </Dashboard>
-
+        {/* <Sidebar></Sidebar> */}
       </div>
       
     );

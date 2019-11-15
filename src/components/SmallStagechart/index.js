@@ -12,8 +12,8 @@ export default class Example extends PureComponent {
     return (
 
        <AreaChart
-       width={300}
-       height={120}
+       width={230}
+       height={100}
        data={this.props.data}
           margin={{
             top: 10, right: 30, left: 0, bottom: 0,

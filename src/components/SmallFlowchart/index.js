@@ -11,8 +11,8 @@ export default class Example extends PureComponent {
   render() {
     return (
       <LineChart
-        width={300}
-        height={120}
+        width={230}
+        height={100}
         data={this.props.data}
         margin={{
           top: 5, right: 30, left: 20, bottom: 5,
