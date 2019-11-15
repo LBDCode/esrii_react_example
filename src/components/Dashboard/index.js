@@ -1,11 +1,17 @@
 import React, {useState, useCallback, useMemo, useEffect} from 'react';
-import Flowchart from '../Flowchart';
-import Stagechart from '../Stagechart';
+import SmallFlowchart from '../SmallFlowchart';
+import SmallStagechart from '../SmallStagechart';
+import LargeFlowChart from '../LargeFlowChart';
+import LargeStageChart from '../LargeStageChart';
+import Modal from "../Modal";
+import useToggle from '../UseModal';
 import API from '../../utils/api';
 import { useGlobal } from 'reactn';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import moment from 'moment';
+
 
 
 const Dashboard = (props) => {
@@ -18,18 +24,36 @@ const Dashboard = (props) => {
   const [flowData, setFlowData] = useState(null);
   const [stageData, setStageData] = useState(null);
 
+  // hooks for local modal state (shown or hidden)
+  const [open, setOpen] = useToggle(false);
+  const [type, setChartType] = useState(null);
 
+  
+  // get gage data objects from API response
   function cleanGageData(data) {
     let gageData = data.data.value.timeSeries[0].values[0].value;
     return gageData;
   }
 
+  function handleChartClick(type) {
+    setChartType(type)
+    setOpen()
+  }
+
+  function largeChart() {
+    if({type} === 'flow') {
+      return <LargeFlowChart></LargeFlowChart>
+    } else if ({type} === 'stage') {
+      return <LargeStageChart></LargeStageChart>
+    }
+  }
+
 
   // update info displayed in dashboard when currentGage
   useEffect(() => {
+
     if (currentGageID) {
       // clean and set flow data for selected gage, if available
-      console.log(currentGageID);
       API.getGagesHistory(currentGageID, "flow").then(response => {
         if (response.data.value.timeSeries[0]) {
           // let val = response.data.value.timeSeries[0].values[0].value[0].value;
@@ -71,34 +95,45 @@ const Dashboard = (props) => {
                   Flow: {(flowData && flowData[flowData.length - 1 ].value) ? flowData[flowData.length - 1 ].value + " cfs": "no flow data available"}
                 </p>
                 <small>last reading: 
-                  { (stageData && stageData[stageData.length - 1 ].dateTime) ? stageData[stageData.length - 1 ].dateTime
+                  { (stageData && stageData[stageData.length - 1 ].dateTime) ? "   " + moment(stageData[stageData.length - 1 ].dateTime).format('D MMM HH:mm')
                     : null
                   }
-
                 </small>
               </div>
             </Col>
             <Col>
-              <div className="dashboardItem">
+              <div key={"flow"} className="dashboardItem" onClick={() => handleChartClick('flow')}>
                 <h6>Flow Chart (cfs) </h6>
                 {(flowData && flowData[flowData.length - 1 ].value) ?
-                <Flowchart data={flowData}></Flowchart>
+                <>
+                  <SmallFlowchart data={flowData}>
+                  </SmallFlowchart>
+                </>
                 :
                 <small>no flow data for this gage</small>
               }
               </div>
             </Col>
             <Col>
-            <div className="dashboardItem">
+            <div key={"stage"} className="dashboardItem" onClick={() => handleChartClick('stage')}>
               <h6>Stage Hydrograph (ft)</h6>
               { (stageData &&  stageData[stageData.length - 1 ].value) ? 
-              <Stagechart data={stageData}></Stagechart>
+              <>
+              <SmallStagechart data={stageData}>
+              </SmallStagechart>
+              </>
               :
               <p>no stage data for this gage</p>
             }
             </div>
             </Col>
           </Row>
+          <Modal
+            open={open} 
+            toggle={setOpen}
+          >
+            <>{type === 'stage' ? <LargeStageChart data={stageData}></LargeStageChart> : <LargeFlowChart data={flowData}></LargeFlowChart>}</>
+          </Modal>
         </Container>
     :
             <></>

@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
 } from 'recharts';
+import moment from 'moment';
+
 
 
 export default class Example extends PureComponent {
@@ -17,7 +19,10 @@ export default class Example extends PureComponent {
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="dateTime" />
+        <XAxis 
+          dataKey="dateTime"
+          tickFormatter={timeStr => moment(timeStr).format('D MMM HH:mm')} 
+        />
         <YAxis />
         {/* <Tooltip /> */}
         {/* <Legend /> */}

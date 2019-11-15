@@ -13,6 +13,7 @@ setGlobal({
   currentGageName: null,
 });
 
+
 setDefaultOptions({ css: true });
 
 ReactDOM.render(<App />, document.getElementById('root'));
