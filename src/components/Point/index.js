@@ -11,9 +11,21 @@ const GagePoint = (props) => {
     const [ currentGageID, setGageID ] = useGlobal('currentGageID');
     const [ currentGageName, setGageName ] = useGlobal('currentGageName');
 
+    // hook for global sidebar toggle state
+    const [ sidebarOpen, setSidebarState] = useGlobal('sidebarOpen');
+
+
+    const toggleDrawer = (open) => event => {
+        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+          return;
+        }
+    
+        setSidebarState(open);
+        // setState({ left: open });
+      };
 
     useEffect(() => {
-        loadModules(['esri/Graphic']).then(([Graphic]) => {
+        loadModules(['esri/Graphic', "esri/widgets/Zoom"]).then(([Graphic, Zoom]) => {
             // Create a point geometry
             var point = {
                 type: "point",
@@ -60,7 +72,8 @@ const GagePoint = (props) => {
                 // esri hitTest() methodchecks to see if any graphics in the view
                 // intersect the given screen point
                 props.view.hitTest(screenPoint)
-                  .then(getGraphics);
+                  .then(getGraphics)
+                  toggleDrawer(true);
             });
 
             // if gage clicked, set global state for currentGage to selected gage

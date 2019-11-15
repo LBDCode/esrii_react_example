@@ -11,7 +11,9 @@ import { setGlobal } from 'reactn';
 setGlobal({
   currentGageID: null, 
   currentGageName: null,
+  sidebarOpen: false
 });
+
 
 setDefaultOptions({ css: true });
 
