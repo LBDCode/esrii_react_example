@@ -103,7 +103,7 @@ const Dashboard = (props) => {
               </Row>
               <Row>
                 <div key={"stage"} className="dashboardItem" onClick={() => handleChartClick('stage')}>
-                  <h6>Stage Hydrograph (ft)</h6>
+                  <h6>Stage Chart (ft)</h6>
                   { (stageData &&  stageData[stageData.length - 1 ].value) ? 
                   <>
                   <SmallStagechart data={stageData}>
@@ -132,8 +132,20 @@ const Dashboard = (props) => {
             open={open} 
             toggle={setOpen}
           >
-            <>{type === 'stage' ? <LargeStageChart data={stageData}></LargeStageChart> : <LargeFlowChart data={flowData}></LargeFlowChart>}</>
-          </Modal>
+            <>
+            {type === 'stage' ?
+              <> 
+              <h4>Stage Chart (ft)</h4>
+              <LargeStageChart data={stageData}></LargeStageChart> 
+              </>
+              : 
+              <>
+              <h4>Flow Chart (cfs)</h4>
+              <LargeFlowChart data={flowData}></LargeFlowChart>
+              </>
+            }
+            </> 
+         </Modal>
         </Container>
     :
             <></>

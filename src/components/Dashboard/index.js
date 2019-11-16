@@ -132,7 +132,18 @@ const Dashboard = (props) => {
             open={open} 
             toggle={setOpen}
           >
-            <>{type === 'stage' ? <LargeStageChart data={stageData}></LargeStageChart> : <LargeFlowChart data={flowData}></LargeFlowChart>}</>
+            <>
+            {type === 'stage' ?
+              <> 
+              <h2>Stage Chart</h2>
+              <LargeStageChart data={stageData}></LargeStageChart> 
+              </>
+              : 
+              <>
+              <h2>Flow Chart</h2>
+              <LargeFlowChart data={flowData}></LargeFlowChart>
+              </>
+            }</>
           </Modal>
         </Container>
     :
