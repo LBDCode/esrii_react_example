@@ -13,7 +13,6 @@ export default class Example extends PureComponent {
       <LineChart
         width={500}
         height={400}
-        data={this.props.data}
         margin={{
           top: 10, right: 30, left: 0, bottom: 0,
         }}
@@ -22,10 +21,14 @@ export default class Example extends PureComponent {
         <XAxis 
           dataKey="dateTime" 
           tickFormatter={timeStr => moment(timeStr).format('D MMM HH:mm')}
+          allowDuplicatedCategory={false}
+
         />
         <YAxis />
         {/* <Tooltip color="#444444"/> */}
-        <Line type="monotone" dataKey="value" dot={false} stroke="#ffffff" strokeOpacity={1}/>
+        <Line type="monotone" data={this.props.data}dataKey="value" dot={false} stroke="#ffffff" strokeOpacity={1}/>
+        <Line type="monotone" data={this.props.forecastData}dataKey="value" dot={false} stroke="#82ca9d" strokeOpacity={1}/>
+
         <ReferenceArea y1={0} y2={2} alwaysShow fill="#28a745" strokeOpacity={0.3} />
         <ReferenceArea y1={2} y2={2.4} alwaysShow fill="#ffc107" strokeOpacity={0.3} />
         <ReferenceArea y1={2.4} y2={3} alwaysShow fill="#ff9007" strokeOpacity={0.3} />

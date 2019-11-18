@@ -30,7 +30,6 @@ const Dashboard = (props) => {
    // hooks for local forecasted flow and stage data for selected gage
    const [forecastflowData, setForecastFlowData] = useState(null);
    const [forecaststageData, setForecastStageData] = useState(null);
-   console.log(forecastflowData)
 
   // hooks for local modal state (shown or hidden)
   const [open, setOpen] = useToggle(false);
@@ -40,12 +39,13 @@ const Dashboard = (props) => {
   // get gage data objects from API response
   function cleanGageData(data) {
     let gageData = data.data.value.timeSeries[0].values[0].value;
+    gageData = gageData.filter(item => item.dateTime.includes(':00:00'));
+    console.log(gageData);
     return gageData;
   }
 
   // get gage Forecast data  from API response
-      // clean stageData
-
+  // clean stageData
   function cleanStageForecast(stage) {
     let stageDatas = stage.map(data=>{
       const timeData = data.children[0].value
@@ -55,31 +55,26 @@ const Dashboard = (props) => {
     })
     return stageDatas;
   }
-      //clean flowData
-
+  
+  //clean flowData
   function cleanFlowForecast(flow) {
     let flowDatas = flow.map(data=>{
       const timeData = data.children[0].value
+      timeData.replace('-00:00', '.000-05:00')
       const flowData = Number(data.children[2].value)*1000
       const newObj = {value:flowData, dateTime:timeData}
       return newObj
     })
+    console.log(flowDatas);
     return flowDatas;
   }
 
+  // click handler function to open modal for correct 
+  // large chart
   function handleChartClick(type) {
     setChartType(type)
     setOpen()
   }
-
-  function largeChart() {
-    if({type} === 'flow') {
-      return <LargeFlowChart></LargeFlowChart>
-    } else if ({type} === 'stage') {
-      return <LargeStageChart></LargeStageChart>
-    }
-  }
-
 
   // update info displayed in dashboard when currentGage
   useEffect(() => {
@@ -105,23 +100,22 @@ const Dashboard = (props) => {
       });
 
     }
-  // get forcast data parse, clean and set the data
 
-  if(currentGageID === "02055000"){
-    API.getGagesForecast.then(
-      async(res) => {
-        const xmlString = await new xmlTostring().parseFromString(res.data);
-        const forecastData = xmlString.children[7].children
-        setForecastStageData(cleanStageForecast(forecastData))
-        setForecastFlowData(cleanFlowForecast(forecastData))
-      }
-    )
-    .catch((err) => {console.log( err)})
-  }else {
-        setForecastStageData([])
-        setForecastFlowData([])
-  }
-
+    // get forcast data parse, clean and set the data
+    if(currentGageID === "02055000"){
+      API.getGagesForecast.then(
+        async(res) => {
+          const xmlString = await new xmlTostring().parseFromString(res.data);
+          const forecastData = xmlString.children[7].children
+          setForecastStageData(cleanStageForecast(forecastData))
+          setForecastFlowData(cleanFlowForecast(forecastData))
+        }
+      )
+      .catch((err) => {console.log( err)})
+    }else {
+          setForecastStageData([])
+          setForecastFlowData([])
+    }
 
   },[currentGageID]);
 
@@ -193,12 +187,12 @@ const Dashboard = (props) => {
             {type === 'stage' ?
               <> 
               <h4>Stage Chart (ft)</h4>
-              <LargeStageChart data={stageData}></LargeStageChart> 
+              <LargeStageChart data={stageData} forecastData={forecaststageData}></LargeStageChart> 
               </>
               : 
               <>
               <h4>Flow Chart (cfs)</h4>
-              <LargeFlowChart data={flowData}></LargeFlowChart>
+              <LargeFlowChart data={flowData} forecastData={forecastflowData}></LargeFlowChart>
               </>
             }
             </> 

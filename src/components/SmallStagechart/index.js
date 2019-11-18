@@ -14,7 +14,6 @@ export default class Example extends PureComponent {
        <AreaChart
        width={230}
        height={100}
-       data={this.props.data}
           margin={{
             top: 10, right: 30, left: 0, bottom: 0,
           }}
@@ -23,10 +22,14 @@ export default class Example extends PureComponent {
           <XAxis
             dataKey="dateTime" 
             tickFormatter={timeStr => moment(timeStr).format('D MMM HH:mm')}
+            allowDuplicatedCategory={false}
+
           />
-          <YAxis />
+          <YAxis dataKey="value"/>
           {/* <Tooltip /> */}
-          <Area type="monotone" dataKey="value" dot={false} stroke="#444" fill="#014d6d" />
+          <Area type="monotone" data={this.props.data} dataKey="value" dot={false} stroke="#444" fill="#014d6d" />
+          <Area type="monotone" data={this.props.forecastData} dataKey="value" dot={false} stroke="#444" fill="#82ca9d" />
+
      </AreaChart>
     );
   }
