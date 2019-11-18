@@ -107,8 +107,12 @@ code {
   margin-bottom: 12px;
   background-color: #fff!important;
   color: #333;
-  /* height: 100%; */
+  min-height: 130px;
   padding-top: 5px;
+}
+
+.dashboardStats {
+  font-size: 85%;
 }
 
 .update {

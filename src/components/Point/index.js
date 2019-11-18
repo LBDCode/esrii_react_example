@@ -58,11 +58,11 @@ const GagePoint = (props) => {
                 geometry: point,
                 symbol: simpleMarkerSymbol,
                 attributes: gageAttr,
-                popupTemplate: {
-                    title: "{name}",
-                //     content: [
-                //     ]
-                } 
+                // popupTemplate: {
+                //     title: "{name}",
+                // //     content: [
+                // //     ]
+                // } 
             });            
             // set the graphic and add to view
             setGraphic(pointGraphic);
