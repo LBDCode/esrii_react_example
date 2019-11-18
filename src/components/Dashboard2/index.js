@@ -25,10 +25,10 @@ const Dashboard = (props) => {
   const [flowData, setFlowData] = useState(null);
   const [stageData, setStageData] = useState(null);
 
-   // hooks for local forcasted flow and stage data for selected gage
-   const [forcastflowData, setForcastFlowData] = useState(null);
-   const [forcaststageData, setForcastStageData] = useState(null);
-   console.log(forcastflowData)
+   // hooks for local forecasted flow and stage data for selected gage
+   const [forecastflowData, setForecastFlowData] = useState(null);
+   const [forecaststageData, setForecastStageData] = useState(null);
+   console.log(forecastflowData)
 
   // hooks for local modal state (shown or hidden)
   const [open, setOpen] = useToggle(false);
@@ -41,21 +41,21 @@ const Dashboard = (props) => {
     return gageData;
   }
 
-  // get gage Forcast data  from API response
-      // clean gageData
+  // get gage Forecast data  from API response
+      // clean stageData
 
-  function cleanGageForcast(gage) {
-    let gageDatas = gage.map(data=>{
+  function cleanStageForecast(stage) {
+    let stageDatas = stage.map(data=>{
       const timeData = data.children[0].value
-      const gageData = data.children[1].value
-      const newObj = {value:gageData, dateTime:timeData}
+      const stageData = data.children[1].value
+      const newObj = {value:stageData, dateTime:timeData}
       return newObj
     })
-    return gageDatas;
+    return stageDatas;
   }
       //clean flowData
 
-  function cleanFlowForcast(flow) {
+  function cleanFlowForecast(flow) {
     let flowDatas = flow.map(data=>{
       const timeData = data.children[0].value
       const flowData = Number(data.children[2].value)*1000
@@ -106,15 +106,18 @@ const Dashboard = (props) => {
   // get forcast data parse, clean and set the data
 
   if(currentGageID === "02055000"){
-    API.getGagesForcast.then(
+    API.getGagesForecast.then(
       async(res) => {
         const xmlString = await new xmlTostring().parseFromString(res.data);
-        const forcastData = xmlString.children[7].children
-        setForcastStageData(cleanGageForcast(forcastData))
-        setForcastFlowData(cleanFlowForcast(forcastData))
+        const forecastData = xmlString.children[7].children
+        setForecastStageData(cleanStageForecast(forecastData))
+        setForecastFlowData(cleanFlowForecast(forecastData))
       }
     )
     .catch((err) => {console.log( err)})
+  }else {
+        setForecastStageData([])
+        setForecastFlowData([])
   }
 
 
@@ -150,8 +153,7 @@ const Dashboard = (props) => {
                   <h6>Stage Hydrograph (ft)</h6>
                   { (stageData &&  stageData[stageData.length - 1 ].value) ? 
                   <>
-                  <SmallStagechart data={stageData}>
-                  </SmallStagechart>
+                  <SmallStagechart data={stageData} forecastData={forecaststageData} />
                   </>
                   :
                   <p>no stage data for this gage</p>
@@ -163,8 +165,7 @@ const Dashboard = (props) => {
                   <h6>Flow Chart (cfs) </h6>
                   {(flowData && flowData[flowData.length - 1 ].value) ?
                   <>
-                    <SmallFlowchart data={flowData}>
-                    </SmallFlowchart>
+                    <SmallFlowchart data={flowData} forecastData={forecastflowData} />
                   </>
                   :
                   <small>no flow data for this gage</small>
