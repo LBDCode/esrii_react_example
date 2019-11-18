@@ -40,7 +40,6 @@ const Dashboard = (props) => {
   function cleanGageData(data) {
     let gageData = data.data.value.timeSeries[0].values[0].value;
     gageData = gageData.filter(item => item.dateTime.includes(':00:00'));
-    console.log(gageData);
     return gageData;
   }
 
@@ -65,7 +64,6 @@ const Dashboard = (props) => {
       const newObj = {value:flowData, dateTime:timeData}
       return newObj
     })
-    console.log(flowDatas);
     return flowDatas;
   }
 
