@@ -23,7 +23,7 @@ const App = () => {
       <div>
         {/* create as sceneview w/ full page map TODO: move styling to index.css */}
         <SlimNav></SlimNav>
-        <Nav></Nav>
+        <Nav />
         <Scene 
           class="full-screen-map"
           style={{ width: '100vw', height: '100vh'}}
@@ -41,9 +41,7 @@ const App = () => {
           ))}
         </Scene>
         {/* render dashboard component, pass selected gage info through*/}
-        <Dashboard
-        >
-        </Dashboard>
+        <Dashboard />
         {/* <Sidebar></Sidebar> */}
       </div>
       
