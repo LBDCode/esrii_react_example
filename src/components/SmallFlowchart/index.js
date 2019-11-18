@@ -10,25 +10,22 @@ export default class Example extends PureComponent {
 
   render() {
     return (
-      <LineChart
+      <LineChart 
         width={230}
         height={100}
-        data={this.props.data}
-        margin={{
-          top: 5, right: 30, left: 20, bottom: 5,
-        }}
       >
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis 
           dataKey="dateTime"
           tickFormatter={timeStr => moment(timeStr).format('D MMM HH:mm')} 
+          allowDuplicatedCategory={false}
         />
-        <YAxis />
-        {/* <Tooltip /> */}
-        {/* <Legend /> */}
-        <Line type="monotone" dataKey="value" dot={false} stroke="#8884d8" />
-      </LineChart>
-      
+        <YAxis  />
+        <Legend />
+        <Line type="monotone" dataKey="value" data={this.props.data}  dot={false} stroke="#8884d8" name="history" key="history" />
+        <Line type="monotone" dataKey="value" data={this.props.forecastData} dot={false} stroke="#82ca9d" name="forecast" key="forecast" />
+
+     </LineChart>
     );
   }
 }
