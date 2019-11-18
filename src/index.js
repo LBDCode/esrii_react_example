@@ -11,6 +11,7 @@ import { setGlobal } from 'reactn';
 setGlobal({
   currentGageID: null, 
   currentGageName: null,
+  currentGageDatum: null,
   sidebarOpen: false
 });
 

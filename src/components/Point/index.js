@@ -10,6 +10,7 @@ const GagePoint = (props) => {
     // hooks for global currentGageID and currentGageName state
     const [ currentGageID, setGageID ] = useGlobal('currentGageID');
     const [ currentGageName, setGageName ] = useGlobal('currentGageName');
+    const [ currentGageDatum, setGageDatum ] = useGlobal('currentGageDatum');
 
     // hook for global sidebar toggle state
     const [ sidebarOpen, setSidebarState] = useGlobal('sidebarOpen');
@@ -47,6 +48,7 @@ const GagePoint = (props) => {
             var gageAttr = {
                 name: props.gageInfo.name,
                 id: props.gageInfo.id,
+                datum: props.gageInfo.datum,
                 location: {longitude: props.gageInfo.long,
                     latitude: props.gageInfo.lat}
             };
@@ -56,11 +58,11 @@ const GagePoint = (props) => {
                 geometry: point,
                 symbol: simpleMarkerSymbol,
                 attributes: gageAttr,
-                popupTemplate: {
-                    title: "{name}",
-                //     content: [
-                //     ]
-                } 
+                // popupTemplate: {
+                //     title: "{name}",
+                // //     content: [
+                // //     ]
+                // } 
             });            
             // set the graphic and add to view
             setGraphic(pointGraphic);
@@ -87,6 +89,7 @@ const GagePoint = (props) => {
                 // set the global gageID and gageName state to attributes of selected gage
                 setGageID(attributes.id);
                 setGageName(attributes.name);
+                setGageDatum(attributes.datum);
               }
 
 
