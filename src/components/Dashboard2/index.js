@@ -7,6 +7,7 @@ import Modal from "../Modal";
 import useToggle from '../UseModal';
 import API from '../../utils/api';
 import { useGlobal } from 'reactn';
+import xmlTostring from 'react-xml-parser'
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -24,6 +25,11 @@ const Dashboard = (props) => {
   const [flowData, setFlowData] = useState(null);
   const [stageData, setStageData] = useState(null);
 
+   // hooks for local forecasted flow and stage data for selected gage
+   const [forecastflowData, setForecastFlowData] = useState(null);
+   const [forecaststageData, setForecastStageData] = useState(null);
+   console.log(forecastflowData)
+
   // hooks for local modal state (shown or hidden)
   const [open, setOpen] = useToggle(false);
   const [type, setChartType] = useState(null);
@@ -33,6 +39,30 @@ const Dashboard = (props) => {
   function cleanGageData(data) {
     let gageData = data.data.value.timeSeries[0].values[0].value;
     return gageData;
+  }
+
+  // get gage Forecast data  from API response
+      // clean stageData
+
+  function cleanStageForecast(stage) {
+    let stageDatas = stage.map(data=>{
+      const timeData = data.children[0].value
+      const stageData = data.children[1].value
+      const newObj = {value:stageData, dateTime:timeData}
+      return newObj
+    })
+    return stageDatas;
+  }
+      //clean flowData
+
+  function cleanFlowForecast(flow) {
+    let flowDatas = flow.map(data=>{
+      const timeData = data.children[0].value
+      const flowData = Number(data.children[2].value)*1000
+      const newObj = {value:flowData, dateTime:timeData}
+      return newObj
+    })
+    return flowDatas;
   }
 
   function handleChartClick(type) {
@@ -73,6 +103,23 @@ const Dashboard = (props) => {
       });
 
     }
+  // get forcast data parse, clean and set the data
+
+  if(currentGageID === "02055000"){
+    API.getGagesForecast.then(
+      async(res) => {
+        const xmlString = await new xmlTostring().parseFromString(res.data);
+        const forecastData = xmlString.children[7].children
+        setForecastStageData(cleanStageForecast(forecastData))
+        setForecastFlowData(cleanFlowForecast(forecastData))
+      }
+    )
+    .catch((err) => {console.log( err)})
+  }else {
+        setForecastStageData([])
+        setForecastFlowData([])
+  }
+
 
   },[currentGageID]);
 
@@ -106,8 +153,7 @@ const Dashboard = (props) => {
                   <h6>Stage Chart (ft)</h6>
                   { (stageData &&  stageData[stageData.length - 1 ].value) ? 
                   <div onClick={() => handleChartClick('stage')}>
-                  <SmallStagechart data={stageData}>
-                  </SmallStagechart>
+                  <SmallStagechart data={stageData} forecastData={forecaststageData} />
                   </div>
                   :
                   <p>no stage data for this gage</p>
@@ -119,8 +165,7 @@ const Dashboard = (props) => {
                   <h6>Flow Chart (cfs) </h6>
                   {(flowData && flowData[flowData.length - 1 ].value) ?
                   <div onClick={() => handleChartClick('flow')}>
-                  <SmallFlowchart data={flowData}>
-                    </SmallFlowchart>
+                  <SmallFlowchart data={flowData} forecastData={forecastflowData} />
                   </div>
                   :
                   <small>no flow data for this gage</small>
