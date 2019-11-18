@@ -86,49 +86,23 @@ export default class Example extends PureComponent {
     } = this.state;
 
     return (
-      <div className="highlight-bar-charts" style={{ userSelect: 'none' }}>
-        {/* <button
-          // href="javascript: void(0);"
-          className="btn update"
-          onClick={this.zoomOut.bind(this)}
-        >
-          Zoom Out
+      <LineChart 
+        width={600}
+        height={300}
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis 
+          dataKey="dateTime"
+          tickFormatter={timeStr => moment(timeStr).format('D MMM HH:mm')} 
+          allowDuplicatedCategory={false}
+        />
+        <YAxis  />
+        <Line type="monotone" dataKey="value" data={this.props.data}  dot={false} stroke="#8884d8" name="history" key="history" />
+        <Line type="monotone" dataKey="value" data={this.props.forecastData} dot={false} stroke="#82ca9d" name="forecast" key="forecast" />
 
-        </button> */}
+      </LineChart>
 
-        <LineChart
-          width={600}
-          height={300}
-          data={data}
-          // onMouseDown={e => this.setState({ refAreaLeft: e.activeLabel })}
-          // onMouseMove={e => this.state.refAreaLeft && this.setState({ refAreaRight: e.activeLabel })}
-          // onMouseUp={this.zoom.bind(this)}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis
-            allowDataOverflow
-            dataKey="dateTime"
-            tickFormatter={timeStr => moment(timeStr).format('D MMM HH:mm')}
-            domain={[left, right]}
-            tickSize={20}
-          />
-          <YAxis
-            allowDataOverflow
-            domain={[bottom, top]}
-            type="number"
-            yAxisId="1"
-          />
 
-          {/* <Tooltip /> */}
-          <Line yAxisId="1" type="natural" dataKey="value" stroke="#8884d8" dot={false} animationDuration={300} />
-
-          {/* {
-            (refAreaLeft && refAreaRight) ? (
-              <ReferenceArea yAxisId="1" x1={refAreaLeft} x2={refAreaRight} strokeOpacity={0.3} />) : null
-            } */}
-        </LineChart>
-
-      </div>
     );
   }
 }
