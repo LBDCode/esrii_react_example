@@ -1,5 +1,5 @@
 import React, {useState, useCallback, useMemo, useEffect} from 'react';
-import Icon from './roanoke_seal.jpg';
+import Icon from './roanoke_logo.jpg';
 
 const Nav = (props) => {  
 

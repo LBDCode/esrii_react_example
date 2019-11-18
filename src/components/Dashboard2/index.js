@@ -149,24 +149,24 @@ const Dashboard = (props) => {
                 </div>
               </Row>
               <Row>
-                <div key={"stage"} className="dashboardItem" onClick={() => handleChartClick('stage')}>
-                  <h6>Stage Hydrograph (ft)</h6>
+                <div key={"stage"} className="dashboardItem" >
+                  <h6>Stage Chart (ft)</h6>
                   { (stageData &&  stageData[stageData.length - 1 ].value) ? 
-                  <>
+                  <div onClick={() => handleChartClick('stage')}>
                   <SmallStagechart data={stageData} forecastData={forecaststageData} />
-                  </>
+                  </div>
                   :
                   <p>no stage data for this gage</p>
                 }
                 </div>
               </Row>
               <Row>
-                <div key={"flow"} className="dashboardItem" onClick={() => handleChartClick('flow')}>
+                <div key={"flow"} className="dashboardItem" >
                   <h6>Flow Chart (cfs) </h6>
                   {(flowData && flowData[flowData.length - 1 ].value) ?
-                  <>
-                    <SmallFlowchart data={flowData} forecastData={forecastflowData} />
-                  </>
+                  <div onClick={() => handleChartClick('flow')}>
+                  <SmallFlowchart data={flowData} forecastData={forecastflowData} />
+                  </div>
                   :
                   <small>no flow data for this gage</small>
                 }
@@ -177,8 +177,20 @@ const Dashboard = (props) => {
             open={open} 
             toggle={setOpen}
           >
-            <>{type === 'stage' ? <LargeStageChart data={stageData}></LargeStageChart> : <LargeFlowChart data={flowData}></LargeFlowChart>}</>
-          </Modal>
+            <>
+            {type === 'stage' ?
+              <> 
+              <h4>Stage Chart (ft)</h4>
+              <LargeStageChart data={stageData}></LargeStageChart> 
+              </>
+              : 
+              <>
+              <h4>Flow Chart (cfs)</h4>
+              <LargeFlowChart data={flowData}></LargeFlowChart>
+              </>
+            }
+            </> 
+         </Modal>
         </Container>
     :
             <></>

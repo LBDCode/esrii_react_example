@@ -7,8 +7,8 @@ import { Scene } from '@esri/react-arcgis';
 import GagePoint from './components/Point';
 import gageData from './utils/dummydata';
 import Dashboard from './components/Dashboard2';
+import SlimNav from './components/SlimNav';
 import Nav from './components/Nav';
-import Sidebar from './components/Sidebar';
 
 
 const App = () => {
@@ -22,16 +22,16 @@ const App = () => {
     return (
       <div>
         {/* create as sceneview w/ full page map TODO: move styling to index.css */}
+        <SlimNav></SlimNav>
         <Nav />
         <Scene 
           class="full-screen-map"
-          style={{ width: '100vw', height: '92vh'}}
+          style={{ width: '100vw', height: '100vh'}}
           mapProperties={{ basemap: 'topo-vector' }}
           viewProperties={{
             center: [-79.9414, 37.2710],
             zoom: 11,
-            popup: {dockEnabled: true, dockOptions: {buttonEnabled: false, breakpoint: false}},
-            ui: {components: [] },
+            ui: {components: [] }
           }}
                   
         >

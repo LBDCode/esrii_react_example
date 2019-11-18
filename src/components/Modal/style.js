@@ -9,15 +9,21 @@ const ModalWrapper = styled.div`
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4);
+  // background-color: rgba(0, 0, 0, 0.4);
 `;
 
 const ModalBody = styled.div`
-  background-color: #fefefe;
+  background-color: #070a04;
+  opacity: .75;
   margin: auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%;
+  width: 60%;
+  position: fixed;
+  bottom: 2px;
+  right: 2px;
+  color: #fff;
+  text-align: center;
 `;
 
 const CloseButton = styled.span`
