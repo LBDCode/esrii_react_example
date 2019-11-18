@@ -7,6 +7,7 @@ import Modal from "../Modal";
 import useToggle from '../UseModal';
 import API from '../../utils/api';
 import { useGlobal } from 'reactn';
+import xmlTostring from 'react-xml-parser'
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -31,6 +32,13 @@ const Dashboard = (props) => {
   
   // get gage data objects from API response
   function cleanGageData(data) {
+    let gageData = data.data.value.timeSeries[0].values[0].value;
+    return gageData;
+  }
+
+  // get gage Forcast data  from API response
+
+  function cleanGageForcast(data) {
     let gageData = data.data.value.timeSeries[0].values[0].value;
     return gageData;
   }
@@ -73,6 +81,18 @@ const Dashboard = (props) => {
       });
 
     }
+  // get forcast data parse, clean and set the data
+
+  if(currentGageID === "02055000"){
+    API.getGagesForcast.then(
+      async(res) => {
+        const xmlString = await new xmlTostring().parseFromString(res.data);
+        console.log('tello', xmlString) 
+      }
+    )
+    .catch((err) => {console.log( err)})
+  }
+
 
   },[currentGageID]);
 

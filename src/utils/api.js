@@ -16,5 +16,5 @@ export default {
     },
 
     // TODO add call to NOAA
-
+    getGagesForcast : axios.get('https://water.weather.gov/ahps2/hydrograph_to_xml.php?gage=ronv2')
 };
