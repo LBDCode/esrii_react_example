@@ -102,26 +102,26 @@ const Dashboard = (props) => {
                 </div>
               </Row>
               <Row>
-                <div key={"stage"} className="dashboardItem" onClick={() => handleChartClick('stage')}>
+                <div key={"stage"} className="dashboardItem" >
                   <h6>Stage Chart (ft)</h6>
                   { (stageData &&  stageData[stageData.length - 1 ].value) ? 
-                  <>
+                  <div onClick={() => handleChartClick('stage')}>
                   <SmallStagechart data={stageData}>
                   </SmallStagechart>
-                  </>
+                  </div>
                   :
                   <p>no stage data for this gage</p>
                 }
                 </div>
               </Row>
               <Row>
-                <div key={"flow"} className="dashboardItem" onClick={() => handleChartClick('flow')}>
+                <div key={"flow"} className="dashboardItem" >
                   <h6>Flow Chart (cfs) </h6>
                   {(flowData && flowData[flowData.length - 1 ].value) ?
-                  <>
-                    <SmallFlowchart data={flowData}>
+                  <div onClick={() => handleChartClick('flow')}>
+                  <SmallFlowchart data={flowData}>
                     </SmallFlowchart>
-                  </>
+                  </div>
                   :
                   <small>no flow data for this gage</small>
                 }
