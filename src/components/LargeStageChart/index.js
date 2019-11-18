@@ -7,7 +7,8 @@ import moment from 'moment';
 
 
 export default class Example extends PureComponent {
-
+   
+   
   render() {
     return (
       <LineChart
@@ -19,6 +20,7 @@ export default class Example extends PureComponent {
         }}
       >
         {/* <CartesianGrid strokeDasharray="3 3" /> */}
+        <CartesianGrid strokeDasharray="3 3" />
         <XAxis 
           dataKey="dateTime" 
           tickFormatter={timeStr => moment(timeStr).format('D MMM HH:mm')}

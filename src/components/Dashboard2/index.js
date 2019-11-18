@@ -30,7 +30,6 @@ const Dashboard = (props) => {
    // hooks for local forecasted flow and stage data for selected gage
    const [forecastflowData, setForecastFlowData] = useState(null);
    const [forecaststageData, setForecastStageData] = useState(null);
-   console.log(forecastflowData)
 
   // hooks for local modal state (shown or hidden)
   const [open, setOpen] = useToggle(false);
@@ -133,9 +132,9 @@ const Dashboard = (props) => {
           <h5 id="dashboardTitle">{currentGageName}</h5>            
           <div >
           <p className="gageInfo">
-            <span class="gageInfoItem">gage ID: {currentGageID}</span>
-            {currentGageDatum ? <span class="gageInfoItem">datum: {currentGageDatum}ft <small>NAVD88</small></span> : <></>}
-            <span class="gageInfoItem">owner: USGS</span>
+            <span className="gageInfoItem">gage ID: <a href={`https://waterdata.usgs.gov/va/nwis/uv?site_no=${currentGageID}`}>{currentGageID}</a></span>
+            {currentGageDatum ? <span className="gageInfoItem">datum: {currentGageDatum}ft <small>NAVD88</small></span> : <></>}
+            <span className="gageInfoItem">owner: USGS</span>
           </p>
 
           </div>
@@ -143,15 +142,17 @@ const Dashboard = (props) => {
               <Row>
                 <div className="dashboardItem">
                   <h6>Current Status</h6>
-                  <p class="dashboardStats">
+                  <p className="dashboardStats">
                     Stage: { (stageData &&  stageData[stageData.length - 1 ].value) ? stageData[stageData.length - 1 ].value + " ft" : "no stage data available"}
                     <br></br>
-                    Flow: {(flowData && flowData[flowData.length - 1 ].value) ? flowData[flowData.length - 1 ].value + " cfs": "no flow data available"}
-                    <br></br>                  
                     {currentGageDatum && stageData ? 
                     <>Elevation: {(parseFloat(currentGageDatum) + parseFloat(stageData[stageData.length - 1].value)).toFixed(1)} ft </>
                     : 
                     <></>}
+                    <br></br>
+                    Flow: {(flowData && flowData[flowData.length - 1 ].value) ? flowData[flowData.length - 1 ].value + " cfs": "no flow data available"}
+                                     
+                    
                   </p>
                   <small>last reading: 
                     { (stageData && stageData[stageData.length - 1 ].dateTime) ? "   " + moment(stageData[stageData.length - 1 ].dateTime).format('D MMM HH:mm')
@@ -193,12 +194,12 @@ const Dashboard = (props) => {
             {type === 'stage' ?
               <> 
               <h4>Stage Chart (ft)</h4>
-              <LargeStageChart data={stageData}></LargeStageChart> 
+              <LargeStageChart data={stageData} forecastData={forecaststageData}></LargeStageChart> 
               </>
               : 
               <>
               <h4>Flow Chart (cfs)</h4>
-              <LargeFlowChart data={flowData}></LargeFlowChart>
+              <LargeFlowChart data={flowData} forecastData={forecastflowData}></LargeFlowChart>
               </>
             }
             </> 
