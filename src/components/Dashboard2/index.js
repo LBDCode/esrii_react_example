@@ -19,6 +19,8 @@ const Dashboard = (props) => {
   // hooks for global gage state and local flow data state
   const [ currentGageID, setGageID ] = useGlobal('currentGageID');
   const [ currentGageName, setGageName] = useGlobal('currentGageName');
+  const [ currentGageDatum, setGageDatum] = useGlobal('currentGageDatum');
+
 
   // hooks for local flow and stage data for selected gage
   const [flowData, setFlowData] = useState(null);
@@ -81,9 +83,15 @@ const Dashboard = (props) => {
     {/* if a gage is selected (props passed w/ current gage name), return dashboard container.  Else return empty fragment. */}
     {currentGageName ? 
         <Container className="dashboardWrapper"> 
-          <h5 id="dashboardTitle">{currentGageName}
-          </h5>
-          <p className="gageNumber">gage #{currentGageID}</p>
+          <h5 id="dashboardTitle">{currentGageName}</h5>            
+          <div >
+          <p className="gageInfo">
+            <span class="gageInfoItem">gage ID: {currentGageID}</span>
+            {currentGageDatum ? <span class="gageInfoItem">datum: {currentGageDatum}ft NAVD88</span> : <></>}
+            <span class="gageInfoItem">owner: USGS</span>
+          </p>
+
+          </div>
             <Col >
               <Row>
                 <div className="dashboardItem">

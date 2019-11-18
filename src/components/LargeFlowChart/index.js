@@ -87,22 +87,22 @@ export default class Example extends PureComponent {
 
     return (
       <div className="highlight-bar-charts" style={{ userSelect: 'none' }}>
-        <button
+        {/* <button
           // href="javascript: void(0);"
           className="btn update"
           onClick={this.zoomOut.bind(this)}
         >
           Zoom Out
 
-        </button>
+        </button> */}
 
         <LineChart
           width={600}
           height={300}
           data={data}
-          onMouseDown={e => this.setState({ refAreaLeft: e.activeLabel })}
-          onMouseMove={e => this.state.refAreaLeft && this.setState({ refAreaRight: e.activeLabel })}
-          onMouseUp={this.zoom.bind(this)}
+          // onMouseDown={e => this.setState({ refAreaLeft: e.activeLabel })}
+          // onMouseMove={e => this.state.refAreaLeft && this.setState({ refAreaRight: e.activeLabel })}
+          // onMouseUp={this.zoom.bind(this)}
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
@@ -119,13 +119,13 @@ export default class Example extends PureComponent {
             yAxisId="1"
           />
 
-          <Tooltip />
+          {/* <Tooltip /> */}
           <Line yAxisId="1" type="natural" dataKey="value" stroke="#8884d8" dot={false} animationDuration={300} />
 
-          {
+          {/* {
             (refAreaLeft && refAreaRight) ? (
               <ReferenceArea yAxisId="1" x1={refAreaLeft} x2={refAreaRight} strokeOpacity={0.3} />) : null
-            }
+            } */}
         </LineChart>
 
       </div>

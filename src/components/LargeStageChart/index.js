@@ -24,7 +24,7 @@ export default class Example extends PureComponent {
           tickFormatter={timeStr => moment(timeStr).format('D MMM HH:mm')}
         />
         <YAxis />
-        <Tooltip />
+        {/* <Tooltip color="#444444"/> */}
         <Line type="monotone" dataKey="value" dot={false} stroke="#ffffff" strokeOpacity={1}/>
         <ReferenceArea y1={0} y2={2} alwaysShow fill="#28a745" strokeOpacity={0.3} />
         <ReferenceArea y1={2} y2={2.4} alwaysShow fill="#ffc107" strokeOpacity={0.3} />
