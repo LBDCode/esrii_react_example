@@ -25,6 +25,11 @@ const Dashboard = (props) => {
   const [flowData, setFlowData] = useState(null);
   const [stageData, setStageData] = useState(null);
 
+   // hooks for local forcasted flow and stage data for selected gage
+   const [forcastflowData, setForcastFlowData] = useState(null);
+   const [forcaststageData, setForcastStageData] = useState(null);
+   console.log(forcastflowData)
+
   // hooks for local modal state (shown or hidden)
   const [open, setOpen] = useToggle(false);
   const [type, setChartType] = useState(null);
@@ -37,10 +42,27 @@ const Dashboard = (props) => {
   }
 
   // get gage Forcast data  from API response
+      // clean gageData
 
-  function cleanGageForcast(data) {
-    let gageData = data.data.value.timeSeries[0].values[0].value;
-    return gageData;
+  function cleanGageForcast(gage) {
+    let gageDatas = gage.map(data=>{
+      const timeData = data.children[0].value
+      const gageData = data.children[1].value
+      const newObj = {value:gageData, dateTime:timeData}
+      return newObj
+    })
+    return gageDatas;
+  }
+      //clean flowData
+
+  function cleanFlowForcast(flow) {
+    let flowDatas = flow.map(data=>{
+      const timeData = data.children[0].value
+      const flowData = Number(data.children[2].value)*1000
+      const newObj = {value:flowData, dateTime:timeData}
+      return newObj
+    })
+    return flowDatas;
   }
 
   function handleChartClick(type) {
@@ -87,7 +109,9 @@ const Dashboard = (props) => {
     API.getGagesForcast.then(
       async(res) => {
         const xmlString = await new xmlTostring().parseFromString(res.data);
-        console.log('tello', xmlString) 
+        const forcastData = xmlString.children[7].children
+        setForcastStageData(cleanGageForcast(forcastData))
+        setForcastFlowData(cleanFlowForcast(forcastData))
       }
     )
     .catch((err) => {console.log( err)})
