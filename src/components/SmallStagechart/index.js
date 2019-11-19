@@ -25,15 +25,18 @@ export default class Example extends PureComponent {
             allowDuplicatedCategory={false}
 
           />
-          <YAxis dataKey="value"/>
+          <YAxis 
+            dataKey="value"
+            domain={[0, this.props.levels.major]}
+          />
           {/* <Tooltip /> */}
           <Area type="monotone" data={this.props.data} dataKey="value" dot={false} stroke="#444" fill="#014d6d" />
           <Area type="monotone" data={this.props.forecastData} dataKey="value" dot={false} stroke="#444" fill="#82ca9d" />
-          <ReferenceArea y1={0} y2={2} alwaysShow fill="#28a745" strokeOpacity={0.3} />
-          <ReferenceArea y1={2} y2={2.4} alwaysShow fill="#ffc107" strokeOpacity={0.3} />
-          <ReferenceArea y1={2.4} y2={3} alwaysShow fill="#ff9007" strokeOpacity={0.3} />
-          <ReferenceArea y1={3} y2={3.4} alwaysShow fill="#dc3545" strokeOpacity={0.3} />
-          <ReferenceArea y1={3.4} y2={4} alwaysShow fill="#7626bf" strokeOpacity={0.3} />
+          <ReferenceArea y1={0} y2={this.props.levels.normal} alwaysShow fill="#28a745" strokeOpacity={0.3} />
+          <ReferenceArea y1={this.props.levels.normal} y2={this.props.levels.monitor} alwaysShow fill="#ffc107" strokeOpacity={0.3} />
+          <ReferenceArea y1={this.props.levels.monitor} y2={this.props.levels.minor} alwaysShow fill="#ff9007" strokeOpacity={0.3} />
+          <ReferenceArea y1={this.props.levels.minor} y2={this.props.levels.moderate} alwaysShow fill="#dc3545" strokeOpacity={0.3} />
+          <ReferenceArea y1={this.props.levels.moderate} y2={this.props.levels.major} alwaysShow fill="#7626bf" strokeOpacity={0.3} />
 
      </AreaChart>
     );

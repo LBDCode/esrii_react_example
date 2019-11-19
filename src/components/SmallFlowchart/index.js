@@ -21,7 +21,7 @@ export default class Example extends PureComponent {
           allowDuplicatedCategory={false}
         />
         <YAxis  />
-        <Legend />
+        {/* <Legend /> */}
         <Line type="monotone" dataKey="value" data={this.props.data}  dot={false} stroke="#8884d8" name="history" key="history" />
         <Line type="monotone" dataKey="value" data={this.props.forecastData} dot={false} stroke="#82ca9d" name="forecast" key="forecast" />
 
