@@ -6,6 +6,7 @@ import LargeStageChart from '../LargeStageChart';
 import Modal from "../Modal";
 import useToggle from '../UseModal';
 import API from '../../utils/api';
+import Data from '../../utils/dummydata';
 import { useGlobal } from 'reactn';
 import xmlTostring from 'react-xml-parser'
 import Container from 'react-bootstrap/Container';
@@ -34,6 +35,10 @@ const Dashboard = (props) => {
   // hooks for local modal state (shown or hidden)
   const [open, setOpen] = useToggle(false);
   const [type, setChartType] = useState(null);
+
+  // hooks for stage levels
+  const [stageLevels, setStageLevels] = useState(null);
+
 
   
   // get gage data objects from API response
@@ -74,6 +79,8 @@ const Dashboard = (props) => {
     setOpen()
   }
 
+
+
   // update info displayed in dashboard when currentGage
   useEffect(() => {
 
@@ -95,8 +102,11 @@ const Dashboard = (props) => {
         } else {
           setStageData("no flow data available");
         }
-      });
-
+      });   
+      
+      // get flood levels, return current levels for current gage
+        const allLevels = Data.stageLevelData()
+        setStageLevels(allLevels[currentGageID]);
     }
 
     // get forcast data parse, clean and set the data
@@ -125,7 +135,7 @@ const Dashboard = (props) => {
           <h5 id="dashboardTitle">{currentGageName}</h5>            
           <div >
           <p className="gageInfo">
-            <span className="gageInfoItem">gage ID: <a href={`https://waterdata.usgs.gov/va/nwis/uv?site_no=${currentGageID}`}>{currentGageID}</a></span>
+            <span className="gageInfoItem">gage ID: <a href={`https://waterdata.usgs.gov/va/nwis/uv?site_no=${currentGageID}`} target="new">{currentGageID}</a></span>
             {currentGageDatum ? <span className="gageInfoItem">datum: {currentGageDatum}ft <small>NAVD88</small></span> : <></>}
             <span className="gageInfoItem">owner: USGS</span>
           </p>
@@ -159,7 +169,7 @@ const Dashboard = (props) => {
                   <h6>Stage Chart (ft)</h6>
                   { (stageData &&  stageData[stageData.length - 1 ].value) ? 
                   <div onClick={() => handleChartClick('stage')}>
-                  <SmallStagechart data={stageData} forecastData={forecaststageData} />
+                  <SmallStagechart levels={stageLevels} data={stageData} forecastData={forecaststageData} />
                   </div>
                   :
                   <p>no stage data for this gage</p>
@@ -186,12 +196,12 @@ const Dashboard = (props) => {
             <>
             {type === 'stage' ?
               <> 
-              <h4>Stage Chart (ft)</h4>
-              <LargeStageChart data={stageData} forecastData={forecaststageData}></LargeStageChart> 
+              <h4 className="largeChartTitle">Stage Chart (ft)</h4>
+              <LargeStageChart levels={stageLevels} data={stageData} forecastData={forecaststageData}></LargeStageChart> 
               </>
               : 
               <>
-              <h4>Flow Chart (cfs)</h4>
+              <h4 className="largeChartTitle">Flow Chart (cfs)</h4>
               <LargeFlowChart data={flowData} forecastData={forecastflowData}></LargeFlowChart>
               </>
             }

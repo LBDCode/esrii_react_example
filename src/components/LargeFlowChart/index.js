@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import {
-  Label, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ReferenceArea,
+  Label, LineChart, Legend, Line, CartesianGrid, XAxis, YAxis, Tooltip, ReferenceArea,
 } from 'recharts';
 import moment from 'moment';
 import Moment from 'react-moment';
@@ -87,8 +87,8 @@ export default class Example extends PureComponent {
 
     return (
       <LineChart 
-        width={600}
-        height={300}
+        width={420}
+        height={240}
       >
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis 
@@ -97,7 +97,8 @@ export default class Example extends PureComponent {
           allowDuplicatedCategory={false}
         />
         <YAxis  />
-        <Line type="monotone" dataKey="value" data={this.props.data}  dot={false} stroke="#8884d8" name="history" key="history" />
+        <Legend />
+        <Line type="monotone" dataKey="value" data={this.props.data}  dot={false} stroke="#8884d8" name="actuals" key="actuals" />
         <Line type="monotone" dataKey="value" data={this.props.forecastData} dot={false} stroke="#82ca9d" name="forecast" key="forecast" />
 
       </LineChart>

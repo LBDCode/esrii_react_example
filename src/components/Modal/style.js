@@ -13,16 +13,15 @@ const ModalWrapper = styled.div`
 `;
 
 const ModalBody = styled.div`
-  background-color: #070a04;
+  background-color: #ffffff;
   opacity: .75;
   margin: auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 60%;
   position: fixed;
   bottom: 2px;
   right: 2px;
-  color: #fff;
+  color: #444444;
   text-align: center;
 `;
 
