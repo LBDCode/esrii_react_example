@@ -40,7 +40,6 @@ const Dashboard = (props) => {
   function cleanGageData(data) {
     let gageData = data.data.value.timeSeries[0].values[0].value;
     gageData = gageData.filter(item => item.dateTime.includes(':00:00'));
-    console.log(gageData);
     return gageData;
   }
 
@@ -65,7 +64,6 @@ const Dashboard = (props) => {
       const newObj = {value:flowData, dateTime:timeData}
       return newObj
     })
-    console.log(flowDatas);
     return flowDatas;
   }
 
@@ -127,9 +125,9 @@ const Dashboard = (props) => {
           <h5 id="dashboardTitle">{currentGageName}</h5>            
           <div >
           <p className="gageInfo">
-            <span class="gageInfoItem">gage ID: {currentGageID}</span>
-            {currentGageDatum ? <span class="gageInfoItem">datum: {currentGageDatum}ft <small>NAVD88</small></span> : <></>}
-            <span class="gageInfoItem">owner: USGS</span>
+            <span className="gageInfoItem">gage ID: <a href={`https://waterdata.usgs.gov/va/nwis/uv?site_no=${currentGageID}`}>{currentGageID}</a></span>
+            {currentGageDatum ? <span className="gageInfoItem">datum: {currentGageDatum}ft <small>NAVD88</small></span> : <></>}
+            <span className="gageInfoItem">owner: USGS</span>
           </p>
 
           </div>
@@ -137,15 +135,17 @@ const Dashboard = (props) => {
               <Row>
                 <div className="dashboardItem">
                   <h6>Current Status</h6>
-                  <p class="dashboardStats">
+                  <p className="dashboardStats">
                     Stage: { (stageData &&  stageData[stageData.length - 1 ].value) ? stageData[stageData.length - 1 ].value + " ft" : "no stage data available"}
                     <br></br>
-                    Flow: {(flowData && flowData[flowData.length - 1 ].value) ? flowData[flowData.length - 1 ].value + " cfs": "no flow data available"}
-                    <br></br>                  
                     {currentGageDatum && stageData ? 
                     <>Elevation: {(parseFloat(currentGageDatum) + parseFloat(stageData[stageData.length - 1].value)).toFixed(1)} ft </>
                     : 
                     <></>}
+                    <br></br>
+                    Flow: {(flowData && flowData[flowData.length - 1 ].value) ? flowData[flowData.length - 1 ].value + " cfs": "no flow data available"}
+                                     
+                    
                   </p>
                   <small>last reading: 
                     { (stageData && stageData[stageData.length - 1 ].dateTime) ? "   " + moment(stageData[stageData.length - 1 ].dateTime).format('D MMM HH:mm')
