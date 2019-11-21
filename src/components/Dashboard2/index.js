@@ -6,6 +6,7 @@ import LargeStageChart from '../LargeStageChart';
 import Modal from "../Modal";
 import useToggle from '../UseModal';
 import API from '../../utils/api';
+import Data from '../../utils/dummydata';
 import { useGlobal } from 'reactn';
 import xmlTostring from 'react-xml-parser'
 import { Container, Tabs, Tab, Col, Row } from 'react-bootstrap';
@@ -33,7 +34,11 @@ const Dashboard = (props) => {
   const [open, setOpen] = useToggle(false);
   const [type, setChartType] = useState(null);
 
+  // hooks for stage levels
+  const [stageLevels, setStageLevels] = useState(null);
 
+
+  
   // get gage data objects from API response
   function cleanGageData(data) {
     let gageData = data.data.value.timeSeries[0].values[0].value;
@@ -72,6 +77,8 @@ const Dashboard = (props) => {
     setOpen()
   }
 
+
+
   // update info displayed in dashboard when currentGage
   useEffect(() => {
 
@@ -93,8 +100,11 @@ const Dashboard = (props) => {
         } else {
           setStageData("no flow data available");
         }
-      });
-
+      });   
+      
+      // get flood levels, return current levels for current gage
+        const allLevels = Data.stageLevelData()
+        setStageLevels(allLevels[currentGageID]);
     }
 
     // get forcast data parse, clean and set the data
@@ -122,11 +132,12 @@ const Dashboard = (props) => {
         <Container className="dashboardWrapper">
           <h5 id="dashboardTitle">{currentGageName}</h5>
           <div >
-            <p className="gageInfo">
-              <span className="gageInfoItem">gage ID: <a href={`https://waterdata.usgs.gov/va/nwis/uv?site_no=${currentGageID}`}>{currentGageID}</a></span>
-              {currentGageDatum ? <span className="gageInfoItem">datum: {currentGageDatum}ft <small>NAVD88</small></span> : <></>}
-              <span className="gageInfoItem"><br/>owner: USGS</span>
-            </p>
+          <p className="gageInfo">
+            <span className="gageInfoItem">gage ID: <a href={`https://waterdata.usgs.gov/va/nwis/uv?site_no=${currentGageID}`} target="new">{currentGageID}</a></span>
+            {currentGageDatum ? <span className="gageInfoItem">datum: {currentGageDatum}ft <small>NAVD88</small></span> : <></>}
+            <span className="gageInfoItem">owner: USGS</span>
+          </p>
+
           </div>
           <Tabs defaultActiveKey="Current" >
             <Tab eventKey="Current" title="Current" className="Tab">
@@ -152,10 +163,11 @@ const Dashboard = (props) => {
                       }
                     </small>
                   </div>
-                </Row>
-                <Row>
-                  <div key={"stage"} className="dashboardItem" >
+              </Row>
+              <Row>
+                <div key={"stage"} className="dashboardItem" >
                     <h6>Stage Chart (ft)</h6>
+                  <small>
                     {(stageData && stageData[stageData.length - 1].value) ?
                       <div onClick={() => handleChartClick('stage')}>
                         <SmallStagechart data={stageData} forecastData={forecaststageData} />
@@ -163,8 +175,23 @@ const Dashboard = (props) => {
                       :
                       <p>no stage data for this gage</p>
                     }
+                  </small>
+                </div>
+              </Row>
+              <Row>
+                <div key={"stage"} className="dashboardItem" >
+                  <h6>Stage Chart (ft)</h6>
+                  <small>
+                  { (stageData &&  stageData[stageData.length - 1 ].value) ? 
+                  <div onClick={() => handleChartClick('stage')}>
+                   <SmallStagechart levels={stageLevels} data={stageData} forecastData={forecaststageData} />
                   </div>
-                </Row>
+                  :
+                  <p>no stage data for this gage</p>
+                }
+                  </small>
+                </div>
+              </Row>
                 <Row>
                   <div key={"flow"} className="dashboardItem" >
                     <h6>Flow Chart (cfs) </h6>
