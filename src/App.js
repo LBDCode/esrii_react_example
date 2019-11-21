@@ -9,6 +9,7 @@ import gageData from './utils/dummydata';
 import Dashboard from './components/Dashboard2';
 import SlimNav from './components/SlimNav';
 import Nav from './components/Nav';
+import Legend from './components/Legend'
 
 
 const App = () => {
@@ -30,17 +31,6 @@ const App = () => {
 
     // get dummy gage info(name, id, lat and long)
     const gageInfo = gageData.gageData();
-
-    //adding the home button using useffect
-    // useEffect(()=>{ 
-
-    // //creat Home button
-    //   var homeBtn = new Home({
-    //   view: view
-    // });
-
-    // // Add the home button to the top left corner of the view
-    // view.ui.add(homeBtn, "top-left")},[])
   
     if(currentMap){
     
@@ -62,8 +52,9 @@ const App = () => {
       </Map>
       {/* render dashboard component, pass selected gage info through*/}
       <Dashboard />
+      <Legend />
       {/* <Sidebar></Sidebar> */}
-    </div>)} else{ console.log('yes map')
+    </div>)} else{
     return (
       <div>
         {/* create as sceneview w/ full page map TODO: move styling to index.css */}
@@ -86,6 +77,7 @@ const App = () => {
         </Scene>
         {/* render dashboard component, pass selected gage info through*/}
         <Dashboard />
+        <Legend />
         {/* <Sidebar></Sidebar> */}
       </div>
       
