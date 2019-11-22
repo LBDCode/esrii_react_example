@@ -1,5 +1,5 @@
 import React from 'react';
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import Current from '../../images/allpins/legend/CURRENT.png';
 import Forecast from '../../images/allpins/legend/FORECAST.png';
 import Normal from '../../images/allpins/legend/GXXX.png';
@@ -16,6 +16,7 @@ import Constant from '../../images/allpins/legend/BXCX.png';
 const Legend = () => {  
 
     const [ currentVisiblity, setvisiblity ] = useState({visibility: "visible"});
+    const [delay, setDelay] = useState(null)
 
     function toggleLegend(e){
         e.preventDefault()
@@ -24,8 +25,17 @@ const Legend = () => {
           })
     }
 
-    return (
+    useEffect(() => {
+        const delay = setTimeout(() => {
+          setDelay('delay');
+        }, 2000);
+        return () => clearTimeout(delay);
+      }, []);
 
+    return (
+        <>
+        {delay ==='delay' ?
+        <>
         <div className="lagend" style={currentVisiblity} >
             <h5 className="Main-Legend-Titel"><strong>Gage Level</strong> <span className="toggle-Legend" onClick={toggleLegend} >X</span></h5>
             <div>
@@ -56,8 +66,13 @@ const Legend = () => {
                 </div>
             </div>
         </div>
-
-        )
+        </> :
+        <>
+        <></>
+        </>
+        }
+        </> 
+  )
 }
 
 
