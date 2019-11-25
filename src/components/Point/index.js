@@ -70,7 +70,8 @@ const GagePoint = (props) => {
 
             // add click listener to view and then hit test to see if point clicked
             props.view.on("click", function(evt) {
-                var screenPoint = evt.screenPoint;        
+                var screenPoint = evt.screenPoint; 
+                      
                 // esri hitTest() methodchecks to see if any graphics in the view
                 // intersect the given screen point
                 props.view.hitTest(screenPoint)
@@ -90,6 +91,8 @@ const GagePoint = (props) => {
                 setGageID(attributes.id);
                 setGageName(attributes.name);
                 setGageDatum(attributes.datum);
+                props.zoomToGage(attributes.location.longitude, attributes.location.latitude) 
+                console.log(attributes)
               }
 
 

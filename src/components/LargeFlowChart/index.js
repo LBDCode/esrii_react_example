@@ -34,7 +34,6 @@ export default class Example extends PureComponent {
     super(props);
     this.state = initialState;
   }
-
   componentDidMount(){
     this.setState({data: this.props.data})
   };
@@ -84,7 +83,7 @@ export default class Example extends PureComponent {
     const {
       data, barIndex, left, right, refAreaLeft, refAreaRight, top, bottom,
     } = this.state;
-
+     console.log(this.props.forecastData)
     return (
       <LineChart 
         width={420}
