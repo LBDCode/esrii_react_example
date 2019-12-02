@@ -1,15 +1,13 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import { useGlobal } from 'reactn';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import { loadCss } from 'esri-loader';
 import { Map, Scene} from '@esri/react-arcgis';
-import GagePoint from './components/Point';
-import gageData from './utils/dummydata';
 import Dashboard from './components/Dashboard2';
 import SlimNav from './components/SlimNav';
 import Nav from './components/Nav';
 import Legend from './components/Legend'
+import FeatureLayer from './components/FeatureLayer/index'
 
 
 const App = () => {
@@ -28,9 +26,6 @@ const App = () => {
 
     // get esrii default css
     loadCss();
-
-    // get dummy gage info(name, id, lat and long)
-    const gageInfo = gageData.gageData();
   
     if(currentMap){
     
@@ -45,10 +40,8 @@ const App = () => {
         viewProperties={currentView}
         loaderOptions={{ css: true }}        
       >
-        {/* map through gage data and add points (component) for each gage to map.  Assume we will want to create a single layer for final version*/}
-        {gageInfo.map(gage => (
-          <GagePoint gageInfo={gage} key={gage.id} zoomToGage={zoomToGage} />
-        ))}
+        {/* render the feature layer of all gages*/}
+        <FeatureLayer zoomToGage={zoomToGage} />
       </Map>
       {/* render dashboard component, pass selected gage info through*/}
       <Dashboard />
@@ -70,10 +63,9 @@ const App = () => {
             ui: {components: [] }
           }}     
         >
-          {/* map through gage data and add points (component) for each gage to map.  Assume we will want to create a single layer for final version*/}
-          {gageInfo.map(gage => (
-            <GagePoint gageInfo={gage} key={gage.id} zoomToGage={zoomToGage} />
-          ))}
+          {/* render the feature layer of all gages*/}
+          
+          <FeatureLayer zoomToGage={zoomToGage} />
         </Scene>
         {/* render dashboard component, pass selected gage info through*/}
         <Dashboard />

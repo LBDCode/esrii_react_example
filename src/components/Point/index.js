@@ -58,11 +58,20 @@ const GagePoint = (props) => {
                 geometry: point,
                 symbol: simpleMarkerSymbol,
                 attributes: gageAttr,
-                // popupTemplate: {
-                //     title: "{name}",
-                // //     content: [
-                // //     ]
-                // } 
+                popupTemplate: {
+                    title: "<p>{name}</p>",
+                    content:  [{
+                        // Pass in the fields to display
+                        type: "fields",
+                        fieldInfos: [{
+                          fieldName: "id",
+                          label: "ID"
+                        }, {
+                          fieldName: "datum",
+                          label: "Datum"
+                       }]
+                      }]
+                } 
             });            
             // set the graphic and add to view
             setGraphic(pointGraphic);
@@ -91,8 +100,7 @@ const GagePoint = (props) => {
                 setGageID(attributes.id);
                 setGageName(attributes.name);
                 setGageDatum(attributes.datum);
-                props.zoomToGage(attributes.location.longitude, attributes.location.latitude) 
-                console.log(attributes)
+                props.zoomToGage(attributes.location.longitude, attributes.location.latitude)
               }
 
 
