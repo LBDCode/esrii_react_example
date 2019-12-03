@@ -25,8 +25,131 @@ const FeatureLayer = (props) => {
 
     useEffect(() => {
         loadModules(['esri/layers/FeatureLayer']).then(([FeatureLayer]) => {
-          
-            // create Layer for graphics
+            // create unique field rendnerer
+            var renderer1 = {
+                type: "unique-value",  // autocasts as new UniqueValueRenderer()
+                field: "CONDITION_TXT",
+                defaultSymbol: { type: "simple-fill" },  // autocasts as new SimpleFillSymbol()
+                uniqueValueInfos: [{
+                  type: "simple-fill",
+                  value: "Near Flooding",
+                  symbol:  {
+                    type:"simple-marker",
+                  color: "#FF00FF",
+                  size: 15,
+                  outline: {
+                    color: [
+                      0,
+                      0,
+                      255,
+                      255
+                    ],
+                    width: 0.99975,
+                    
+                  }
+                }
+                }, {
+                  type: "simple-fill",
+                  value: "Normal",
+                  symbol:  {
+                    type:"simple-marker",
+                  color: "#00FF00",
+                  size: 15,
+                  outline: {
+                    color: [
+                      100,
+                      100,
+                      128,
+                      255
+                    ],
+                    width: 0.99975,
+                    
+                  }
+                }
+                }, {
+                  type: "simple-fill",
+                  value: "Minor Flooding",
+                  symbol:  {
+                    type:"simple-marker",
+                  color:"#FFA500",
+                  size: 15,
+                  outline: {
+                    color: [
+                      0,
+                      0,
+                      128,
+                      255
+                    ],
+                    width: 0.99975,
+                    
+                  }
+                }
+                }, {
+                  type: "simple-fill",
+                  value: "Moderate Flooding",
+                  symbol:  {
+                    type:"simple-marker",
+                  color: "#FF0000",
+                  size: 15,
+                  outline: {
+                    color: [
+                      0,
+                      0,
+                      128,
+                      255
+                    ],
+                    width: 0.99975,
+                    
+                  }
+                }
+                }],
+              }
+
+              var renderer2 = {
+                type: "unique-value",  // autocasts as new UniqueValueRenderer()
+                field: "CONDITION_TXT",
+                defaultSymbol: { type: "picture-marker" },  // autocasts as new SimpleFillSymbol()
+                uniqueValueInfos: [{
+                  type: "picture-marker",
+                  value: "Near Flooding",
+                  symbol:  {
+                    type: "picture-marker",
+                    url :"https://picsum.photos/id/41/200/300",
+                    width:"30px",
+                    height:"30px"
+                }
+                }, {
+                  type: "picture-marker",
+                  value: "Normal",
+                  symbol:  {
+                    type: "picture-marker",
+                    url :"https://static.arcgis.com/images/Symbols/Shapes/BlackStarLargeB.png",
+                    width:"30px",
+                    height:"30px"
+                }
+                }, {
+                  type: "picture-marker",
+                  value: "Minor Flooding",
+                  symbol:  {
+                    type: "picture-marker",
+                    url :"https://picsum.photos/id/8/200/300",
+                    width:"30px",
+                    height:"30px"
+                }
+                }, {
+                  type: "picture-marker",
+                  value: "Moderate Flooding",
+                  symbol:  {
+                    type: "picture-marker",
+                    url :"https://picsum.photos/id/527/200/300",
+                    width:"30px",
+                    height:"30px"
+                }
+                }],
+              }
+             
+
+            // create Layer for all gages
             const featureLayer = new FeatureLayer({
             url: "https://services2.arcgis.com/tUcNZGjl0sYxJaxf/arcgis/rest/services/Roanokegages/FeatureServer/0",
             mode: FeatureLayer.MODE_SNAPSHOT,
@@ -34,15 +157,18 @@ const FeatureLayer = (props) => {
             opacity: 1.0,
             supportsPagination: true,
             refreshInterval: 15,
-            renderer:{
-                type:"simple",
-                symbol:  {
-                    type: "picture-marker",
-                    url :"https://picsum.photos/id/41/200/300",
-                    width:"30px",
-                    height:"30px"
-                }
-            }
+            renderer: renderer1
+            // renderer: renderer2
+            // renderer:
+            // {
+            //     type:"simple",
+            //     symbol:  {
+            //         type: "picture-marker",
+            //         url :"https://picsum.photos/id/1/200/300",
+            //         width:"30px",
+            //         height:"30px"
+            //     }
+            // }
             
             })          
             props.map.add(featureLayer); 
@@ -71,90 +197,90 @@ const FeatureLayer = (props) => {
                 console.log(attributes)
               }
 
-            const setSymbolValue = (value) => {
-                var conditionChar, forecastChar, trendChar, rainChar;
-                var inServiceValue = value.attributes.IN_SERVICE;
-                var conditionValue = value.attributes.CONDITION;
-                var trendValue = value.attributes.TREND;
-                var forecastValue = value.attributes.FORECAST_CONDITION;
-                var rainValue = value.attributes.RAIN_CONDITION;
-                if (inServiceValue == 1) {
-                    if (conditionValue != null) {
-                        switch (conditionValue) {
-                            case 0:
-                                conditionChar = "G";
-                                break;
-                            case 1:
-                                conditionChar = "Y";
-                                break;
-                            case 2:
-                                conditionChar = "O";
-                                break;
-                            case 3:
-                                conditionChar = "R";
-                                break;
-                            case 4:
-                                conditionChar = "P";
-                                break;
-                            default:
-                                conditionChar = "B";
-                                break;
-                            }
-                        switch (forecastValue) {
-                            case null:
-                                forecastChar = "X";
-                                break;
-                            case 0:
-                                forecastChar = "G";
-                                break;
-                            case 1:
-                                forecastChar = "Y";
-                                break;
-                            case 2:
-                                forecastChar = "O";
-                                break;
-                            case 3:
-                                forecastChar = "R";
-                                break;
-                            case 4:
-                                forecastChar = "P";
-                                break;
-                            default:
-                                forecastChar = "X";
-                                break;
-                            }
-                        switch (trendValue) {
-                            case null:
-                                trendChar = "X";
-                                break;
-                            case "Constant":
-                                trendChar = "C";
-                                break;
-                            case "Falling":
-                                trendChar = "F";
-                                break;
-                            case "Rising":
-                                trendChar = "R";
-                                break;
-                            }
-                        switch (rainValue) {
-                            case 1:
-                                rainChar = "R";
-                                break;
-                            default:
-                                rainChar = "X";
-                                break;
-                            }
-                        symbolValue = conditionChar + "," + forecastChar + "," + trendChar + "," + rainChar;
-                    } else {
-                        symbolValue = "X,X,X,X";
-                    }
-                } else {
-                    symbolValue = "X,X,X,X";
-                }
+            // const setSymbolValue = (value) => {
+            //     var conditionChar, forecastChar, trendChar, rainChar;
+            //     var inServiceValue = value.attributes.IN_SERVICE;
+            //     var conditionValue = value.attributes.CONDITION;
+            //     var trendValue = value.attributes.TREND;
+            //     var forecastValue = value.attributes.FORECAST_CONDITION;
+            //     var rainValue = value.attributes.RAIN_CONDITION;
+            //     if (inServiceValue == 1) {
+            //         if (conditionValue != null) {
+            //             switch (conditionValue) {
+            //                 case 0:
+            //                     conditionChar = "G";
+            //                     break;
+            //                 case 1:
+            //                     conditionChar = "Y";
+            //                     break;
+            //                 case 2:
+            //                     conditionChar = "O";
+            //                     break;
+            //                 case 3:
+            //                     conditionChar = "R";
+            //                     break;
+            //                 case 4:
+            //                     conditionChar = "P";
+            //                     break;
+            //                 default:
+            //                     conditionChar = "B";
+            //                     break;
+            //                 }
+            //             switch (forecastValue) {
+            //                 case null:
+            //                     forecastChar = "X";
+            //                     break;
+            //                 case 0:
+            //                     forecastChar = "G";
+            //                     break;
+            //                 case 1:
+            //                     forecastChar = "Y";
+            //                     break;
+            //                 case 2:
+            //                     forecastChar = "O";
+            //                     break;
+            //                 case 3:
+            //                     forecastChar = "R";
+            //                     break;
+            //                 case 4:
+            //                     forecastChar = "P";
+            //                     break;
+            //                 default:
+            //                     forecastChar = "X";
+            //                     break;
+            //                 }
+            //             switch (trendValue) {
+            //                 case null:
+            //                     trendChar = "X";
+            //                     break;
+            //                 case "Constant":
+            //                     trendChar = "C";
+            //                     break;
+            //                 case "Falling":
+            //                     trendChar = "F";
+            //                     break;
+            //                 case "Rising":
+            //                     trendChar = "R";
+            //                     break;
+            //                 }
+            //             switch (rainValue) {
+            //                 case 1:
+            //                     rainChar = "R";
+            //                     break;
+            //                 default:
+            //                     rainChar = "X";
+            //                     break;
+            //                 }
+            //             symbolValue = conditionChar + "," + forecastChar + "," + trendChar + "," + rainChar;
+            //         } else {
+            //             symbolValue = "X,X,X,X";
+            //         }
+            //     } else {
+            //         symbolValue = "X,X,X,X";
+            //     }
         
-                return symbolValue;
-            }
+            //     return symbolValue;
+            // }
 
 
 
