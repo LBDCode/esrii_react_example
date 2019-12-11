@@ -19,8 +19,11 @@ export default {
             }
         )
     },
-
-     allValues : [
+    imageryUrl : "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer"  ,  
+    mapUrl : "https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer",
+    gagePinsUrl : "https://espgis.com/FIMAN_T/images/allpins/",
+    gageUrl :"https://services2.arcgis.com/tUcNZGjl0sYxJaxf/arcgis/rest/services/Roanokegages/FeatureServer/0",
+    symbolValues : [
                   "B,X,X,X", "B,X,X,R", "B,X,C,X", "B,X,C,R", "B,X,F,X", "B,X,F,R", "B,X,R,X",
                   "B,X,R,R", "B,B,X,X", "B,B,X,R", "B,B,C,X", "B,B,C,R", "B,B,F,X", "B,B,F,R", 
                   "B,B,R,X", "B,B,R,R", "B,G,X,X", "B,G,X,R", "B,G,C,X", "B,G,C,R", "B,G,F,X", 

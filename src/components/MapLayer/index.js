@@ -1,16 +1,15 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState} from 'react';
 import { loadModules } from 'esri-loader';
 import { useGlobal } from 'reactn';
+import Data from '../../utils/dummydata';
 
 const MapLayer = () => {
-    const mapRef = useRef();
     const [currentZoom, setZoom] = useState(13)
     const [currentCeneter, setCenter]= useState([-79.9414, 37.2710])
     const [ currentGageID, setGageID ] = useGlobal('currentGageID');
     const [ currentGageName, setGageName ] = useGlobal('currentGageName');
     const [ currentGageDatum, setGageDatum ] = useGlobal('currentGageDatum');
-    const imageryUrl = "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer"    
-    const mapUrl = "https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer"
+    
   
     // hook for global sidebar toggle state
   const [ sidebarOpen, setSidebarState] = useGlobal('sidebarOpen');
@@ -25,8 +24,8 @@ const MapLayer = () => {
       // setState({ left: open });
     };
       // lazy load the required ArcGIS API for JavaScript modules and CSS
-      loadModules(['esri/Map', 'esri/views/MapView', 'esri/layers/TileLayer', 'esri/layers/FeatureLayer'])
-      .then(([Map, MapView, TileLayer, FeatureLayer]) => {
+      loadModules(['esri/Map', 'esri/views/MapView','esri/Basemap', 'esri/widgets/BasemapGallery', 'esri/layers/TileLayer', 'esri/layers/FeatureLayer'])
+      .then(([Map, MapView, Basemap, BasemapGallery, TileLayer, FeatureLayer]) => {
         //create renderer for the feature class
         var renderer = {
           type: "unique-value",  // autocasts as new UniqueValueRenderer()
@@ -37,7 +36,7 @@ const MapLayer = () => {
             value: "Near Flooding",
             symbol:  {
               type: "picture-marker",
-              url :"https://res.cloudinary.com/teddyzenebe/image/upload/v1575489505/allpins/Y/ORX.png",
+              url :`${Data.gagePinsUrl}Y/ORX.png`,
               width:"30px",
               height:"30px"
           }
@@ -46,7 +45,7 @@ const MapLayer = () => {
             value: "Normal",
             symbol:  {
               type: "picture-marker",
-              url :"https://res.cloudinary.com/teddyzenebe/image/upload/v1575488857/allpins/G/XCX.png",
+              url :`${Data.gagePinsUrl}G/XCX.png`,
               width:"30px",
               height:"30px"
           }
@@ -55,7 +54,7 @@ const MapLayer = () => {
             value: "Minor Flooding",
             symbol:  {
               type: "picture-marker",
-              url :"https://res.cloudinary.com/teddyzenebe/image/upload/v1575489384/allpins/R/XFX.png",
+              url :`${Data.gagePinsUrl}R/XFX.png`,
               width:"30px",
               height:"30px"
           }
@@ -64,7 +63,7 @@ const MapLayer = () => {
             value: "Moderate Flooding",
             symbol:  {
               type: "picture-marker",
-              url :"https://res.cloudinary.com/teddyzenebe/image/upload/v1575489357/allpins/P/XFX.png",
+              url :`${Data.gagePinsUrl}P/XFX.png`,
               width:"30px",
               height:"30px"
           }
@@ -73,7 +72,7 @@ const MapLayer = () => {
 
         // create Layer for all gages
         const featureLayer = new FeatureLayer({
-          url: "https://services2.arcgis.com/tUcNZGjl0sYxJaxf/arcgis/rest/services/Roanokegages/FeatureServer/0",
+          url: Data.gageUrl,
           mode: FeatureLayer.MODE_SNAPSHOT,
           outFields: ["*"],
           opacity: 1.0,
@@ -82,18 +81,28 @@ const MapLayer = () => {
           renderer: renderer
         })  
 
-        const basemap = new TileLayer(
+        const topomap = new TileLayer(
                             {
-                                url:mapUrl,
+                                url:Data.mapUrl,
                                 maxScale:   36112
                             }
                         );
 
         
 
-        const imagery = new TileLayer(imageryUrl, 0);
+        const imagery = new TileLayer({
+          url:Data.imageryUrl,
+          minScale:   36112
+      });
+
+      var defaultBasemap = new Basemap({
+        baseLayers: [topomap, imagery],
+        title: "Roanoke Basemap and Imagery",
+        id: "roanokeBasemap"
+    });
         
         const map = new Map({
+          basemap:defaultBasemap
               }); 
         // load the map view at the ref's DOM node
         const view = new MapView({
@@ -102,10 +111,14 @@ const MapLayer = () => {
           center:  currentCeneter,
           zoom: currentZoom,
         });
-
-        map.add(basemap)
-        map.add(imagery, 0)
         map.add(featureLayer); 
+        const basemapGallery = new BasemapGallery({
+          view: view,
+          container: document.createElement("div")
+        });
+        view.ui.add(basemapGallery, {
+          position: "top-right"
+        });
         view.ui.move("zoom", "bottom-left");
 
         view.on("click", function(evt) {

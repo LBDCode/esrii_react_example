@@ -28,7 +28,7 @@ const App = () => {
     //     loaderOptions={{ css: true }}        
     //   >
     //     {/* render the feature layer of all gages*/}
-    //     <FeatureLayer zoomToGage={zoomToGage} />
+    //     <Gage Points zoomToGage={zoomToGage} />
     //   </Map>
     //   {/* render dashboard component, pass selected gage info through*/}
     //   <Dashboard />
@@ -39,6 +39,7 @@ const App = () => {
       <div>
         <SlimNav></SlimNav>
         <Nav />
+        {/* render mapLayer component, whch include the feature class and different basemap layer*/}
         <MapLayer />     
         {/* render dashboard component, pass selected gage info through*/}
         <Dashboard />
