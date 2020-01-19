@@ -359,3 +359,10 @@ button {
 .largeChartTitle {
   font-size: 20px;
 }
+
+#clickTester {
+  z-index:90;
+  position: absolute;
+  top: 400px;
+  left: 0;
+}
